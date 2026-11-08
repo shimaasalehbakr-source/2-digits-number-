@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>2-Digit Numbers: Tens and Ones</title>
+<style>
+:root{--bg:#fff8ec;--card:#fff;--ink:#2b2340;--ten:#2f7bff;--one:#ff8a1f;--hij:#8a5bc2;--dress:#f06a9b;--skin:#f1c9a5;--bub:#e9f3ff;--btn:#6c4bd1;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1c1830;--card:#2a2445;--ink:#f4efff;--bub:#33305a;--btn:#8d74ee}}
+:root[data-theme="dark"]{--bg:#1c1830;--card:#2a2445;--ink:#f4efff;--bub:#33305a;--btn:#8d74ee}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS",Verdana,sans-serif;display:flex;justify-content:center}
+.app{width:100%;max-width:520px;padding:12px}
+h1{font-size:20px;text-align:center;margin:4px 0 8px}
+.top{display:flex;align-items:center;gap:8px}
+#teacher{width:104px;flex:none}
+#say{flex:1;background:var(--bub);border-radius:18px;padding:12px 14px;font-size:18px;line-height:1.35;min-height:84px;display:flex;align-items:center;position:relative}
+#say:before{content:"";position:absolute;left:-10px;top:30px;border:10px solid transparent;border-right-color:var(--bub);border-left:0}
+.stage{background:var(--card);border-radius:20px;margin-top:10px;padding:10px;box-shadow:0 2px 8px #0002}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.col{border-radius:14px;padding:6px;text-align:center}
+.col.t{background:#2f7bff22}.col.o{background:#ff8a1f22}
+.col h2{margin:0 0 4px;font-size:18px}.t h2{color:var(--ten)}.o h2{color:var(--one)}
+.box{height:176px;display:flex;align-items:flex-end;justify-content:center;gap:5px;flex-wrap:wrap;align-content:flex-end}
+.rod{display:flex;flex-direction:column-reverse;gap:1px;animation:pop .5s}
+.rod i{display:block;width:14px;height:14px;background:var(--ten);border-radius:3px}
+#ones{width:96px;margin:auto;gap:3px}
+.cube{width:16px;height:16px;background:var(--one);border-radius:4px;animation:pop .4s}
+@keyframes pop{0%{transform:scale(0) rotate(-20deg)}70%{transform:scale(1.25)}100%{transform:scale(1)}}
+.merge .cube{animation:fly .8s forwards}
+@keyframes fly{to{transform:translate(-60px,-30px) scale(.2);opacity:0}}
+.num{display:flex;justify-content:center;gap:16px;font-size:64px;font-weight:700;min-height:78px;align-items:center}
+.num b:first-child{color:var(--ten)}.num b:last-child{color:var(--one)}
+.num.hot b{animation:pop .6s}
+.words{text-align:center;font-size:17px;min-height:24px}
+.ctrl{display:none;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+.ctrl.on{display:flex}
+button{font:inherit;font-size:18px;border:0;border-radius:14px;padding:12px 16px;background:var(--btn);color:#fff;cursor:pointer;min-height:48px}
+button.t{background:var(--ten)}button.o{background:var(--one)}button.g{background:#8a8aa0}
+.nav{display:flex;gap:8px;justify-content:center;align-items:center;margin-top:12px}
+.dots{display:flex;gap:6px}.dots span{width:10px;height:10px;border-radius:50%;background:#9996}.dots .on{background:var(--btn)}
+#goal{text-align:center;font-size:22px;font-weight:700;display:none;margin-top:6px}
+#win{position:fixed;inset:0;display:none;align-items:center;justify-content:center;flex-direction:column;background:#0006;z-index:9;font-size:56px;text-align:center;color:#fff;font-weight:700}
+#win.on{display:flex}
+#win div{animation:pop .7s}
+#win .em{font-size:72px;animation:bounce .6s infinite alternate}
+@keyframes bounce{to{transform:translateY(-18px)}}
+.talk{animation:talk .22s infinite alternate;transform-origin:60px 71px}
+@keyframes talk{from{transform:scaleY(.4)}to{transform:scaleY(1.5)}}
+.wave{transform-origin:92px 108px;animation:wave 1s ease-in-out infinite alternate}
+@keyframes wave{from{transform:rotate(-8deg)}to{transform:rotate(28deg)}}
+#teacher{animation:sway 2.4s ease-in-out infinite alternate;transform-origin:50% 100%}
+@keyframes sway{from{transform:rotate(-2deg)}to{transform:rotate(2deg)}}
+#start{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:20}#start button{font-size:28px;padding:22px 30px}
+</style></head><body>
+<div class="app">
+<h1>🔢 Tens and Ones</h1>
+<div class="top">
+<svg id="teacher" viewBox="0 0 120 150" aria-label="Teacher">
+<ellipse cx="60" cy="52" rx="44" ry="46" fill="var(--hij)"/>
+<path d="M18 80 Q60 150 102 80 L108 150 H12Z" fill="var(--hij)"/>
+<rect x="32" y="108" width="56" height="42" rx="14" fill="var(--dress)"/>
+<ellipse cx="60" cy="56" rx="28" ry="31" fill="var(--skin)"/>
+<circle cx="49" cy="52" r="3.5" fill="#2b2340"/><circle cx="71" cy="52" r="3.5" fill="#2b2340"/>
+<circle cx="42" cy="63" r="5" fill="#f59a9a" opacity=".6"/><circle cx="78" cy="63" r="5" fill="#f59a9a" opacity=".6"/>
+<ellipse id="mouth" cx="60" cy="71" rx="8" ry="4" fill="#b23a48"/>
+<g class="wave"><rect x="86" y="104" width="14" height="38" rx="7" fill="var(--dress)" transform="rotate(-20 92 108)"/><circle cx="104" cy="104" r="8" fill="var(--skin)"/></g>
+</svg>
+<div id="say">Hello!</div>
+</div>
+<div class="stage">
+<div id="goal"></div>
+<div class="cols"><div class="col t"><h2>Tens</h2><div class="box" id="tens"></div></div>
+<div class="col o"><h2>Ones</h2><div class="box" id="ones"></div></div></div>
+<div class="num" id="num"><b></b><b></b></div>
+<div class="words" id="words"></div>
+<div class="ctrl" id="ctrl"><button class="t" onclick="add(1)">+ 1 Ten</button><button class="o" onclick="add(0)">+ 1 One</button><button class="g" onclick="reset()">↺ Clear</button></div>
+</div>
+<div class="nav"><button class="g" onclick="go(-1)">◀</button><button id="pp" onclick="toggle()">⏸</button><button class="g" onclick="go(1)">▶</button><button class="g" id="vo" onclick="voice()">🔊</button></div>
+<div class="nav"><div class="dots" id="dots"></div></div>
+</div>
+<div id="start"><button onclick="begin()">▶ Start the lesson</button></div>
+<div id="win"><div class="em">🎉</div><div>Wow! Bravo!</div><div class="em">⭐</div></div>
+<script>
+var $=function(i){return document.getElementById(i)};
+var t=0,o=0,step=0,auto=true,vOn=true,tm=[],goal=null,targets=[35,52,17,40,28,63,11,46,70,24,89,33,58,95,76],gi=0;
+function T(f,ms){tm.push(setTimeout(f,ms))}
+function clr(){tm.forEach(clearTimeout);tm=[]}
+var AC=null;
+function tone(f,s,d,ty){if(!AC||!vOn)return;var os=AC.createOscillator(),g=AC.createGain(),n=AC.currentTime+s;os.type=ty||'sine';os.frequency.value=f;g.gain.setValueAtTime(0,n);g.gain.linearRampToValueAtTime(.25,n+.02);g.gain.exponentialRampToValueAtTime(.001,n+d);os.connect(g);g.connect(AC.destination);os.start(n);os.stop(n+d+.05)}
+function pop(){tone(520,0,.12)}
+function cheer(){[523,659,784,1047].forEach(function(f,i){tone(f,i*.14,.3,'triangle')})}
+function finish(){goal=null;$('goal').textContent='All 15 done! 🌟';draw(0,0);cheer();T(function(){say('Amazing! You finished all 15 numbers!')},1000)}
+function begin(){$('start').style.display='none';try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}run()}
+function say(s){
+  $('say').textContent=s;var m=$('mouth');m.classList.add('talk');
+  T(function(){m.classList.remove('talk')},Math.min(4200,s.length*75));
+  if(vOn){try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(s);u.lang='en-US';u.rate=.85;speechSynthesis.speak(u)}catch(e){}}
+}
+function draw(a,b,words){
+  t=a;o=b;var h='';
+  for(var i=0;i<a;i++){h+='<div class="rod">'+'<i></i>'.repeat(10)+'</div>'}
+  $('tens').innerHTML=h;
+  $('ones').innerHTML='<span class="cube"></span>'.repeat(b);
+  var n=$('num').children;
+  if(a+b===0){n[0].textContent='';n[1].textContent=''}else{n[0].textContent=a;n[1].textContent=b}
+  $('num').classList.remove('hot');void $('num').offsetWidth;$('num').classList.add('hot');
+  $('words').textContent=words||(a+b? a+' ten'+(a==1?'':'s')+' + '+b+' one'+(b==1?'':'s')+' = '+(a*10+b):'');
+}
+var steps=[
+ {dur:5000,run:function(){ctl(0);draw(0,0);say('Hello, friends! Today we learn 2-digit numbers.')}},
+ {dur:15000,run:function(){ctl(0);draw(0,0);
+   say('Let’s count ones. Watch!');
+   for(var i=1;i<=10;i++)(function(k){T(function(){draw(0,k,k+' one'+(k>1?'s':''));say(String(k))},2400+k*600)})(i);
+   T(function(){say('10 ones…');$('ones').classList.add('merge')},9000);
+   T(function(){$('ones').classList.remove('merge');draw(1,0,'10 ones = 1 ten');say('…make 1 TEN! A ten is a rod!')},10200)}},
+ {dur:14000,run:function(){ctl(0);draw(0,0);
+   say('Let’s build 24. First, the tens!');
+   T(function(){draw(1,0)},1800);T(function(){draw(2,0)},2800);
+   T(function(){say('2 tens = 20')},3600);
+   T(function(){say('Now the ones!')},5500);
+   for(var i=1;i<=4;i++)(function(k){T(function(){draw(2,k)},6300+k*800)})(i);
+   T(function(){say('2 tens and 4 ones make 24!')},10200)}},
+ {dur:0,run:function(){ctl(1);$('goal').style.display='none';goal=null;draw(0,0);
+   say('Your turn! Tap the buttons to build a number.')}},
+ {dur:0,run:function(){ctl(1);goal=targets[gi%targets.length];draw(0,0);
+   $('goal').style.display='block';$('goal').textContent='Make '+goal+'  ('+(gi+1)+'/15)';
+   say('Can you make '+goal+'? How many tens? How many ones?')}}
+];
+function ctl(on){$('ctrl').classList.toggle('on',!!on)}
+function run(){
+  clr();$('win').classList.remove('on');
+  var d='';steps.forEach(function(_,i){d+='<span class="'+(i==step?'on':'')+'"></span>'});$('dots').innerHTML=d;
+  if(step<3)$('goal').style.display='none';
+  steps[step].run();
+  if(steps[step].dur&&auto)T(function(){go(1)},steps[step].dur);
+}
+function go(d){var n=step+d;if(n<0||n>=steps.length)return;step=n;run()}
+function toggle(){auto=!auto;$('pp').textContent=auto?'⏸':'▶';if(auto)run()}
+function voice(){vOn=!vOn;$('vo').textContent=vOn?'🔊':'🔇';if(!vOn){try{speechSynthesis.cancel()}catch(e){}}}
+function add(ten){
+  pop();if(ten){if(t<9)t++}else{o++}
+  if(o>=10){
+    $('ones').classList.add('merge');var tt=t;
+    T(function(){$('ones').classList.remove('merge');t=Math.min(9,tt+1);o=0;draw(t,0);say('10 ones make 1 ten!');chk()},800);
+    return;
+  }
+  draw(t,o);chk();
+}
+function reset(){draw(0,0)}
+function chk(){
+  if(step==4&&goal!==null&&t*10+o===goal){
+    var g=goal,tt=t,oo=o;goal=null;cheer();T(function(){say('Wow! Bravo! '+tt+' tens and '+oo+' ones is '+g+'!')},1000);
+    $('win').classList.add('on');
+    T(function(){$('win').classList.remove('on');gi++;if(gi>=targets.length)finish();else steps[4].run()},4500);
+  }
+}
+</script>
+</body></html>
